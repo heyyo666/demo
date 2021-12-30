@@ -1,0 +1,139 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8" />
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+    <style>
+        #carousel-example-generic {
+            height: 75%;
+        }
+
+        #carousel-example-generic .carousel-inner>.item>img {
+            display: block;
+            width: 100%;
+            height: 75%;
+        }
+        body{
+            background:  no-repeat center;
+            background-size: auto;
+            padding-top: 25px;
+        }
+
+    </style>
+
+</head>
+<body>
+<!-- 反色导航条组件  -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"  href="/function/index">DDoS攻击演示系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/function/principle">原理介绍</a></li>
+                <li ><a href="/function/demonstration" >攻击演示</a></li>
+                <li><a href="/function/code">代码分析</a></li>
+                <li><a href="/function/defense">防御方法介绍与展示</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">学习网站 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://www.csdn.net/" target="_blank">CSDN</a></li>
+                        <li><a href="https://www.hetianlab.com/" target="_blank">合天网安实验室</a></li>
+                        <li><a href="https://www.cnvd.org.cn/" target="_blank">国家信息安全漏洞共享平台</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">关于我们<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">网站简介</a></li>
+                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#">合作伙伴</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="navbar-form navbar-right "   action="https://www.baidu.com/s" target="_blank">
+                <div class="form-group">
+                    <input   type="text" name="wd" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default" >Submit</button>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
+                <li class="dropdown">
+                    <a href="#" th:text="${session.login.username}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span  class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>Email:<a th:text="${session.login.email}"></a></li>
+                        <li>Name:<a th:text="${session.login.name}"></a></li>
+                        <li>Phone:<a th:text="${session.login.phone}"></a></li>
+                        <li>Birthday:<a th:text="${session.login.birthday}"></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="page-header">
+    <h1>SYN Flood防御方法 <small>Defense method</small></h1>
+</div>
+<div class="container-fluid" style="margin-left: 20px; margin-right: 20px ">
+    <h2>一、为什么Syn Flood会造成危害  </h2>
+    <p><strong>这要从操作系统的TCP/IP协议栈的实现说起。当开放了一个TCP端口后，该端口就处于Listening状态，不停地监视发到该端口的Syn报文，一旦接收到Client发来的Syn报文，就需要为该请求分配一个TCB（Transmission Control Block），通常一个TCB至少需要280个字节，在某些操作系统中TCB甚至需要1300个字节，并返回一个SYN ACK命令，立即转为SYN-RECEIVED即半开连接状态，而某些操作系统在SOCK的实现上最多可开启512个半开连接（如Linux2.4.20内核）。这种过程如下图所示：</strong></p>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcUB5pDpJUwXC1vxfbmL1P2mxmDGjnGic6whFoTQWgsSB3As6EWgeNnRcD3*Hqc3E17yNOBdyWif2mAhdQxujqT4!/b&amp;bo=KQHZAAAAAAABF8E!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p>&nbsp;</p>
+    <p><strong>从以上过程可以看到，如果恶意的向某个服务器端口发送大量的SYN包，则可以使服务器打开大量的半开连接，分配TCB，从而消耗大量的服务器资源，同时也使得正常的连接请求无法被相应。而攻击发起方的资源消耗相比较可忽略不计。</strong></p>
+    <h2>二、如何防御Syn Flood攻击</h2>
+    <p><strong>我们先来看一下Syn Flood有哪些种类，如下图所示：</strong>  </p>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcUB5pDpJUwXC1vxfbmL1P2nKmBuf13Bchv1Wagrs8U7wUNtqEvG7tQWPRyZg6XpW6k3ZP5p2ZQ.yhW*TV1Uc3T8!/b&amp;bo=TwLIAAAAAAABF7U!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p><strong>1． Direct Attack 攻击方使用固定的源地址发起攻击，这种方法对攻击方的消耗最小</strong>  </p>
+    <p><strong>2．Spoofing Attack 攻击方使用变化的源地址发起攻击，这种方法需要攻击方不停地修改源地址，实际上消耗也不大</strong></p>
+    <p><strong>3． Distributed Direct Attack 这种攻击主要是使用僵尸网络进行固定源地址的攻击</strong></p>
+    <p><strong>对于第一种攻击的防范可以使用比较简单的方法，即对SYN包进行监视，如果发现某个IP发起了较多的攻击报文，直接将这个IP列入黑名单即可。当然下述的方法也可以对其进行防范。</strong>  </p>
+    <p><strong>对于源地址不停变化的攻击使用上述方法则不行，首先从某一个被伪装的IP过来的Syn报文可能不会太多，达不到被拒绝的阈值，其次从这个被伪装的IP（真实的）的请求会被拒绝掉。因此必须使用其他的方法进行处理。</strong>  </p>
+    <p><strong>1． 无效连接监视释放</strong>  </p>
+    <p><strong>这种方法不停监视系统的半开连接和不活动连接，当达到一定阈值时拆除这些连接，从而释放系统资源。这种方法对于所有的连接一视同仁，而且由于SYN Flood造成的半开连接数量很大，正常连接请求也被淹没在其中被这种方式误释放掉，因此这种方法属于入门级的SYN Flood方法。</strong>  </p>
+    <p><strong>2． 延缓TCB分配方法</strong>  </p>
+    <p><strong>从前面SYN Flood原理可以看到，消耗服务器资源主要是因为当SYN数据报文一到达，系统立即分配TCB，从而占用了资源。而SYN Flood由于很难建立起正常连接，因此，当正常连接建立起来后再分配TCB则可以有效地减轻服务器资源的消耗。常见的方法是使用Syn Cache和Syn Cookie技术。</strong>    </p>
+    <p><strong>Syn Cache技术：</strong>    </p>
+    <p><strong>这种技术是在收到SYN数据报文时不急于去分配TCB，而是先回应一个SYN ACK报文，并在一个专用HASH表（Cache）中保存这种半开连接信息，直到收到正确的回应ACK报文再分配TCB。在FreeBSD系统中这种Cache每个半开连接只需使用160字节，远小于TCB所需的736个字节。在发送的SYN ACK中需要使用一个己方的Sequence Number，这个数字不能被对方猜到，否则对于某些稍微智能一点的Syn Flood攻击软件来说，它们在发送Syn报文后会发送一个ACK报文，如果己方的Sequence Number被对方猜测到，则会被其建立起真正的连接。因此一般采用一些加密算法生成难于预测的Sequence Number。</strong>    </p>
+    <p><strong>Syn Cookie技术：</strong>   </p>
+    <p><strong>对于SYN攻击，Syn Cache虽然不分配TCB，但是为了判断后续对方发来的ACK报文中的Sequence Number的正确性，还是需要使用一些空间去保存己方生成的Sequence Number等信息，也造成了一些资源的浪费。</strong>  </p>
+    <p><strong>Syn Cookie技术则完全不使用任何存储资源，这种方法比较巧妙，它使用一种特殊的算法生成Sequence Number，这种算法考虑到了对方的IP、端口、己方IP、端口的固定信息，以及对方无法知道而己方比较固定的一些信息，如MSS、时间等，在收到对方的ACK报文后，重新计算一遍，看其是否与对方回应报文中的（Sequence Number-1）相同，从而决定是否分配TCB资源。</strong></p>
+    <p><strong>3． 使用SYN Proxy防火墙</strong>  </p>
+    <p><strong>Syn Cache技术和Syn Cookie技术总的来说是一种主机保护技术，需要系统的TCP/IP协议栈的支持，而目前并非所有的操作系统支持这些技术。因此很多防火墙中都提供一种SYN代理的功能，其主要原理是对试图穿越的SYN请求进行验证后才放行，下图描述了这种过程：</strong>  </p>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcdXYnMx8qJSw94dZP1iuXv9HT9Z9jZX.2B16ITocqfLdfddidPogGTyhjXpDMpieRTiqvx91eIAUlgdfkMNM4ts!/b&amp;bo=SwJvAQAAAAABFxc!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p><strong>从上图（左图）中可以看出，防火墙在确认了连接的有效性后，才向内部的服务器（Listener）发起SYN请求，在右图中，所有的无效连接均无法到达内部的服务器。而防火墙采用的验证连接有效性的方法则可以是Syn Cookie或Syn Flood等其他技术。</strong>    </p>
+    <p><strong>采用这种方式进行防范需要注意的一点就是防火墙需要对整个有效连接的过程发生的数据包进行代理，如下图所示：</strong>    </p>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcdXYnMx8qJSw94dZP1iuXv8YnEUwIaM48TKk54XrZG*WSyoo4iW4f3YNRRGYgvEqsVpISERV9*t9yWPA2TVonfE!/b&amp;bo=owF7AQAAAAACF.s!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p>&nbsp;</p>
+    <p><strong>因为防火墙代替发出的SYN ACK包中使用的序列号为c，而服务器真正的回应包中序列号为c’，这其中有一个差值|c-c’|，在每个相关数据报文经过防火墙的时候进行序列号的修改。</strong></p>
+    <p><strong>TCP Safe Reset技术：</strong>  </p>
+    <p><strong>这也是防火墙Syn代理的一种方式，其工作过程如下图所示：</strong>  </p>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcdXYnMx8qJSw94dZP1iuXv*uHkhBNIAuIGLqVfAynT*Y7MPErPgXm*YrjgYkFSSdoUV8hgqvaJAzXahIlEqy79g!/b&amp;bo=5wHwAQAAAAACFyQ!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p>&nbsp;</p>
+    <p><strong>这种方法在验证了连接之后立即发出一个Safe Reset命令包，从而使得Client重新进行连接，这时出现的Syn报文防火墙就直接放行。在这种方式中，防火墙就不需要对通过防火墙的数据报文进行序列号的修改了。这需要客户端的TCP协议栈支持RFC 793中的相关约定，同时由于Client需要两次握手过程，连接建立的时间将有所延长。</strong></p>
+</div>
+</body>
+</html>

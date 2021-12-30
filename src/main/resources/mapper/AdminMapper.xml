@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.demo.mapper.AdminMapper">
+    <select id="login"  parameterType="String" resultType="com.my.demo.domain.Admin">
+        select * from admin where username = #{username} and password = #{password};
+    </select>
+
+    <insert id="register" parameterType="com.my.demo.domain.Admin">
+        insert into admin (username,password,email,name,phone,gender,birthday)
+        values (#{username},#{password},#{email},#{name},#{phone},#{gender},#{birthday});
+    </insert>
+
+</mapper>

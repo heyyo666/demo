@@ -1,0 +1,147 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8" />
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+    <style>
+        #carousel-example-generic {
+            height: 75%;
+        }
+
+        #carousel-example-generic .carousel-inner>.item>img {
+            display: block;
+            width: 100%;
+            height: 75%;
+        }
+        body{
+            background:  no-repeat center;
+            background-size: auto;
+            padding-top: 25px;
+        }
+
+    </style>
+
+</head>
+<body>
+<!-- 反色导航条组件  -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/function/index">DDoS攻击演示系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/function/principle">原理介绍</a></li>
+                <li ><a href="/function/demonstration" >攻击演示</a></li>
+                <li><a href="/function/code">代码分析</a></li>
+                <li><a href="/function/defense">防御方法介绍与展示</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">学习网站 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://www.csdn.net/" target="_blank">CSDN</a></li>
+                        <li><a href="https://www.hetianlab.com/" target="_blank">合天网安实验室</a></li>
+                        <li><a href="https://www.cnvd.org.cn/" target="_blank">国家信息安全漏洞共享平台</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">关于我们<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">网站简介</a></li>
+                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#">合作伙伴</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="navbar-form navbar-right "   action="https://www.baidu.com/s" target="_blank">
+                <div class="form-group">
+                    <input   type="text" name="wd" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default" >Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
+                <li class="dropdown">
+                    <a href="#" th:text="${session.login.username}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span  class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>Email:<a th:text="${session.login.email}"></a></li>
+                        <li>Name:<a th:text="${session.login.name}"></a></li>
+                        <li>Phone:<a th:text="${session.login.phone}"></a></li>
+                        <li>Birthday:<a th:text="${session.login.birthday}"></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="page-header">
+    <h1>DDos原理介绍 <small>The principle</small></h1>
+</div>
+<div class="container-fluid" style="margin-left: 20px; margin-right: 20px ">
+<h2>DDOS攻击</h2>
+<p><strong>DDoS攻击手段是在传统的DoS攻击基础之上产生的一类攻击方式。</strong>
+    <strong>单一的DoS攻击一般是采用一对一方式的，当攻击目标CPU速度低、内存小或者网络带宽小等等各项性能指标不高它的效果是明显的。随着计算机与网络技术的发展，计算机的处理能力迅速增长，内存大大增加，同时也出现了千兆、万兆、百级级别的网络，这使得DoS攻击的困难程度加大了-目标对恶意攻击包的&quot;消化能力&quot;加强了不少。例如你的攻击软件每秒钟可以发送3,000个攻击包，但我的主机与网络带宽每秒钟可以处理10,000个攻击包，这样一来攻击就不会产生什么效果</strong></p>
+<p><strong>分布式拒绝服务(DDoS:Distributed Denial of Service)攻击指借助于客户/服务器技术，将多个计算机联合起来作为攻击平台，对一个或多个目标发动DoS攻击，从而成倍地提高拒绝服务攻击的威力。</strong>
+    <strong>通常，攻击者使用一个偷窃帐号将DDoS主控程序安装在一个计算机上，在一个设定的时间主控程序将与大量代理程序通讯，代理程序已经被安装在Internet上的许多计算机上。代理程序收到指令时就发动攻击。利用客户/服务器技术，主控程序能在几秒钟内激活成百上千次代理程序的运行。</strong></p>
+<p><strong>被DDoS攻击时的现象：</strong></p>
+<p><strong>1.被攻击的主机上有大量等待的TCP连接。</strong><br/><strong>2.网络中充斥着大量的无用的数据包，源地址为假。</strong><br/><strong>3.制造高流量无用数据，造成网络拥塞，使被攻击的主机无法正常通信。</strong><br/><strong>4.利用受害主机提供的服务或传输协议上的缺陷，反复高速的发出特定的服务请求，使受害主机无法及时处理所有正常请求。</strong><br/><strong>5.严重时会造成系统死机。</strong></p>
+<h2>DDoS的类型及原理  </h2>
+<p><strong>DDOS攻击主要分为三类：流量型攻击；连接型攻击；特殊协议缺陷</strong></p>
+<h3>1.Ip flood  </h3>
+<p><strong>攻击原理：
+    此攻击以多个随机的源主机地址向目的主机发送超大量的随机或特定的IP包，造成目标主机不能处理其他正常的IP报文。</strong></p>
+<p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYkriRfmPUKxTOoJgBL9cLrx9RxagCnPM*GJyTTbInMrlFau7h6wJ5hwQ7hdhqrmsjAnxBsvb0Uc6PxkyeoVb3c!/b&amp;bo=LgKYAAAAAAADF4Y!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>2. Icmp Flood</h3>
+<p><strong>攻击原理：
+    icmp flood 也就是 ping flood，此攻击在短时间内向目的主机发送大量的ping的echo报文，主机不断响应，造成网络堵塞、主机资源耗尽。</strong></p>
+<p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYkriRfmPUKxTOoJgBL9cLrpONT5VfEFJ7p5AETbUhGML.USW5McgxLi7AilLFhmvmZb9k43NI9mhPwQpPhDdCg!/b&amp;bo=LgKWAAAAAAADF4g!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>3. Syn Flood</h3>
+<p><strong>攻击原理：
+    依据 tcp建立连接的三次握手。此攻击以多个随机的源主机地址向目的主机发送syn包，而在收到目的主机的syn＋ack包后并不回应，目的主机就为这些源主机建立大量的连接队列，由于没有收到ack一直维护这些连接队列，造成资源的大量消耗而不能向正常的请求提供服务。
+    与之类似的攻击方式还有ack-flood、s-ack-flood、fin-flood、rst-flood、tcp-flood</strong></p>
+    <img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYY5AgKaExyxwbvHntUody6rQ1kxzMRL6Cau0WgEcqu3jTULNUzSLarRbec6z0gAkMpZXcUQnj6fmNcpPFI0qHA!/b&amp;bo=LgKOAAAAAAADF5A!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>4. UDP Flood</h3>
+<p><strong>攻击原理：
+    此攻击在短时间内 模拟随机的源端口地址向随机的目的端口发送大量的udp包，造成目标主机不能处理其他udp的请求</strong></p>
+    <img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYY5AgKaExyxwbvHntUody4ld6hiKO45K0mdrmuZEFW2O8F*cR*1KgRHHloPyacPi8d0QDy*d04Nl0Mu1USp*MM!/b&amp;bo=LgK.AAAAAAADF6A!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>5. IP scan</h3>
+<p><strong>攻击原理：
+    攻击者 通过IP扫描可以迅速服务器网络情况及服务器主机信息，为后面的攻击做好准备。通过发送IP扫描探测包探测存在的服务器主机。</strong></p>
+    <img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYY5AgKaExyxwbvHntUody4iRYS7hwIqIb2OYdm6Tkn8a6JPugjlKedHJg2L1JQ4SN0FrjZynRkmoA8eLzYjdXA!/b&amp;bo=LgILAQAAAAADFxQ!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>6. Port scan</h3>
+<p><strong>攻击原理：
+    当一个源ip地址在规定的时间间隔内将tcp syn包发送给一个目标地址的多个不同端口时，就是一次端口扫描，目的是扫描 可用的服务，从而识别目标的服务。</strong></p>
+    <img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYkriRfmPUKxTOoJgBL9cLrUbDYgzI4thgAY603YTy*BnFh6g3X.ps.zY9zfrxM5FH9hcyBKCUhzk8SEqvewphA!/b&amp;bo=LgKiAAAAAAADF7w!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>7. ping of death</h3>
+<p><strong>攻击原理：
+    根据tcp/ip的规范，一个包的长度最大为65535字节。攻击向一个目标地址发送icmp echo包的大于65535字节（这需要多个分片叠加才能做到），当主机重组这些分片发现包大于65535字节时，就会导致宕机。</strong></p>
+    <img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcW0J9CQWdAnNP5ofgdZsD3oiT.KnUWcsBLhykRExaZyCtpXGdXJnJ1p6fpzwr4vRHC3pOhUk*SF1ZR7UIWNifYk!/b&amp;bo=LgKDAAAAAAADF50!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<h3>8. CC攻击</h3>
+<p><strong>攻击原理：
+    利用 代理服务器 向 受害者 发起大量HTTP Get 请求；主要请求动态页面，涉及到数据库访问操作；数据库负载以及数据库连接池负载极高，无法响应正常请求</strong></p>
+<p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mcYY5AgKaExyxwbvHntUody50t.0EoqksruynfK9yAbKScaGZFbbXNnKBK9ykyWZOWEfYGoA8aB9gejmGywc3yjA!/b&amp;bo=LgK9AQAAAAADN4I!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</div>
+</body>
+</html>

