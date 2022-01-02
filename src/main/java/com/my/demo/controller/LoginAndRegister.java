@@ -1,7 +1,6 @@
 package com.my.demo.controller;
 
 import com.my.demo.domain.Admin;
-import com.my.demo.mapper.AdminMapper;
 import com.my.demo.service.DemoService;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
@@ -9,7 +8,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
@@ -53,7 +50,7 @@ public class LoginAndRegister {
 //            登入成功
 //            将用户存入session
             session.setAttribute("login",login);
-            return "index";
+            return "index1";
         }else {
             map.put("login_msg","用户名或密码错误");
             return "login";

@@ -16,7 +16,7 @@
             box-sizing: border-box;
         }
 
-        body {
+        body{
             background: url("bg.jpeg") no-repeat center;
             ackground-repeat: no-repeat;
             background-size: 100%
@@ -164,7 +164,7 @@
 
 <body>
 
-<div class="rg_layout" style="background:url('static/img/bg.jpeg'); margin-top: 100px; background-size: contain ;border-style: none">
+<div class="rg_layout" style="background:url('bg.jpeg'); margin-top: 100px; background-size: contain ;border-style: none">
     <div class="rg_left">
         <p>登入</p>
         <p>USER LOGIN</p>
@@ -219,11 +219,12 @@
 
 </div>
 
-
 <script th:inline="javascript">
     var msg = [[${login_msg}]];
-    alert(msg);
-    location.href="/login.html";
+    if(msg=='验证码错误!'||msg=='用户名或密码错误') {
+        alert(msg);
+        location.href = "/login.html";
+    }
 </script>
 
 

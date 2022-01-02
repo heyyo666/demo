@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/function")
 public class Function {
 
-    @RequestMapping("index")
-    private String index(){
-        return "index";
+
+    @RequestMapping("/index1")
+    private String index1(){
+        return "index1";
     }
 
     @RequestMapping("/principle")
