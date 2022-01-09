@@ -1,6 +1,7 @@
 package com.my.demo.controller;
 
 import com.my.demo.domain.Admin;
+import com.my.demo.domain.FileEntity;
 import com.my.demo.service.DemoService;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
@@ -8,6 +9,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -32,7 +35,7 @@ public class LoginAndRegister {
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         @RequestParam("checkcode") String getcheckcode,
-                        Map map,HttpSession session)  {
+                        Map map, HttpSession session, Model model)  {
 //      获取验证码数据
         String checkcode =getcheckcode ;
 //        验证码效验
@@ -46,11 +49,24 @@ public class LoginAndRegister {
 //        调用Service查询
 
         Admin login = demoService.login(username, password);
+        List<FileEntity> fileEntities = demoService.fileList();
+        System.out.println(fileEntities.get(0).toString());
+        System.out.println(login.getPrivateKey());
         if(login!=null){
 //            登入成功
 //            将用户存入session
             session.setAttribute("login",login);
-            return "index1";
+            List<FileEntity> fileLists = demoService.fileList();
+            if(fileLists==null){
+                FileEntity noFile = new FileEntity();
+                noFile.setFileName("无");
+                noFile.setFilePath("无");
+                noFile.setCount(-1);
+                noFile.setChangeTime("无");
+                fileLists.add(noFile);
+            }
+            model.addAttribute("fileLists", fileLists);
+            return "index2";
         }else {
             map.put("login_msg","用户名或密码错误");
             return "login";

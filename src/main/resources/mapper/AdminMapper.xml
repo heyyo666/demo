@@ -5,9 +5,40 @@
         select * from admin where username = #{username} and password = #{password};
     </select>
 
+    <select id="findAdmin"  parameterType="String" resultType="com.my.demo.domain.Admin">
+        select * from admin where username = #{username};
+    </select>
+
+    <insert id="addPrivateKey" parameterType="com.my.demo.domain.Admin">
+        insert into admin (privateKey)
+        values (#{privateKey})
+        where where username = #{username};
+    </insert>
+
+
     <insert id="register" parameterType="com.my.demo.domain.Admin">
         insert into admin (username,password,email,name,phone,gender,birthday)
         values (#{username},#{password},#{email},#{name},#{phone},#{gender},#{birthday});
     </insert>
 
+    <select id="fileList"  resultType="com.my.demo.domain.FileEntity">
+        select * from filelist;
+    </select>
+
+    <select id="selectOne"   parameterType="String" resultType="com.my.demo.domain.FileEntity">
+        select * from filelist where fileName=#{fileName};
+    </select>
+    <insert id="fileAdd" parameterType="com.my.demo.domain.FileEntity">
+        insert into filelist (fileName,filePath,count,changeTime)
+        values (#{fileName},#{filePath},#{count},#{changeTime});
+    </insert>
+
+    <update id="updateCount" parameterType="com.my.demo.domain.FileEntity">
+        update filelist
+        <set>
+        <if test="count!=null"> count=#{count},</if>
+        <if test="changeTime!=null"> changeTime=#{changeTime},</if>
+        </set>
+        where fileName=#{fileName};
+    </update>
 </mapper>

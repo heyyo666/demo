@@ -11,8 +11,16 @@ public class Admin {
     private String phone;
     private  String gender;
     private Date birthday;
+    private String privateKey;
 
 
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
 
     public String getUsername() {
         return username;
@@ -80,6 +88,7 @@ public class Admin {
                 ", phone='" + phone + '\'' +
                 ", gender='" + gender + '\'' +
                 ", birthday=" + birthday +
+                ", privateKey='" + privateKey + '\'' +
                 '}';
     }
 }
