@@ -49,11 +49,4 @@ public class DemoService {
     public void updateCount(FileEntity fileEntity){
         adminMapper.updateCount(fileEntity);
     }
-
-    public Admin findAdmin(String username){
-        return  adminMapper.findAdmin(username);
-    }
-    public void addPrivateKey(Admin admin){
-        adminMapper.addPrivateKey(admin);
-    }
 }

@@ -29,7 +29,7 @@ public class UploadsAndDownloads {
     private DemoService demoService;
 
     @RequestMapping("/upload")
-    public String upload(@RequestParam("file") MultipartFile file, Map map, Model model,@RequestParam("username") String username) {
+    public String upload(@RequestParam("file") MultipartFile file, Map map, Model model) {
         if (file.isEmpty()) {
             return "上传失败，请选择文件";
         }
@@ -45,7 +45,6 @@ public class UploadsAndDownloads {
             Date date = new Date();
             String strDate = DateFormat.changeDateFormat( date);
             fileEntity.setChangeTime(strDate);
-            demoService.findAdmin(username)
             demoService.encryption(file,filePath,fileName);
             demoService.addFile(fileEntity);
 
@@ -82,8 +81,6 @@ public class UploadsAndDownloads {
             if(fileEntity!=null){
                 Integer count = fileEntity.getCount() + 1;
                 fileEntity.setCount(count);
-                Date date = new Date();
-                fileEntity.setChangeTime( DateFormat.changeDateFormat(date));
                 demoService.updateCount(fileEntity);
             }
 

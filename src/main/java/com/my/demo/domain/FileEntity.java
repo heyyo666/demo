@@ -5,24 +5,6 @@ public class FileEntity {
     private  String filePath;
     private  Integer Count;
     private String changeTime;
-    private String publicKey;
-    private String permissions;
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
-    public String getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
-    }
 
     public String getChangeTime() {
         return changeTime;
@@ -59,13 +41,11 @@ public class FileEntity {
 
     @Override
     public String toString() {
-        return "FileEntity{" +
+        return "File{" +
                 "fileName='" + fileName + '\'' +
                 ", filePath='" + filePath + '\'' +
                 ", Count=" + Count +
-                ", changeTime='" + changeTime + '\'' +
-                ", publicKey='" + publicKey + '\'' +
-                ", permissions='" + permissions + '\'' +
+                ", changeDate='" + changeTime + '\'' +
                 '}';
     }
 }

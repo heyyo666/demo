@@ -135,7 +135,7 @@
 </table>
 
 
-<form method="post" th:action="@{/uploadsAndDownloads/upload(username=${session.login.name})}" enctype="multipart/form-data">
+<form  method="post" action="/uploadsAndDownloads/upload" enctype="multipart/form-data">
     <input class="btn btn-primary btn-lg btn-block "  type="file" name="file">
     <input  class="btn btn-primary btn-lg btn-block"  type="submit" value="提交">
 </form>

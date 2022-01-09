@@ -15,7 +15,5 @@ public interface AdminMapper {
     public FileEntity selectOne(String fileName);
     public void fileAdd(FileEntity fileEntity);
     public void updateCount(FileEntity fileEntity);
-    public Admin findAdmin(String username);
-    public void addPrivateKey(Admin admin);
 
 }

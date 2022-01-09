@@ -49,9 +49,6 @@ public class LoginAndRegister {
 //        调用Service查询
 
         Admin login = demoService.login(username, password);
-        List<FileEntity> fileEntities = demoService.fileList();
-        System.out.println(fileEntities.get(0).toString());
-        System.out.println(login.getPrivateKey());
         if(login!=null){
 //            登入成功
 //            将用户存入session
