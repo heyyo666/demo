@@ -7,8 +7,8 @@
 
 
     <insert id="register" parameterType="com.my.demo.domain.Admin">
-        insert into admin (username,password,email,name,phone,gender,birthday)
-        values (#{username},#{password},#{email},#{name},#{phone},#{gender},#{birthday});
+        insert into admin (username,password,email,name,phone,gender,birthday,privateKey)
+        values (#{username},#{password},#{email},#{name},#{phone},#{gender},#{birthday},#{privateKey});
     </insert>
 
     <select id="fileList"  resultType="com.my.demo.domain.FileEntity">
