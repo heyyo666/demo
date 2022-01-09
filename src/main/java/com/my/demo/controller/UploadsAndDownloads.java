@@ -70,34 +70,39 @@ public class UploadsAndDownloads {
     @RequestMapping("/download")
     public String dowmload(@RequestParam("source") String source,
                         @RequestParam("fileName") String fileName,
-                        Map map,Model model) {
+                        Map map,Model model,String privateKeyStr) {
+        if(this.privateKeyStr.equals(privateKeyStr)) {
+            try {
+                map.put("download_msg", "下载成功");
 
-        try {
-            map.put("download_msg","下载成功");
 
+                demoService.decryption(source, fileName);
+                FileEntity fileEntity = demoService.selectOne(fileName);
+                if (fileEntity != null) {
+                    Integer count = fileEntity.getCount() + 1;
+                    fileEntity.setCount(count);
+                    Date date = new Date();
+                    fileEntity.setChangeTime(DateFormat.changeDateFormat(date));
+                    demoService.updateCount(fileEntity);
+                }
 
-            demoService.decryption(source,fileName);
-            FileEntity fileEntity = demoService.selectOne(fileName);
-            if(fileEntity!=null){
-                Integer count = fileEntity.getCount() + 1;
-                fileEntity.setCount(count);
-                demoService.updateCount(fileEntity);
+                List<FileEntity> fileLists = demoService.fileList();
+                if (fileLists == null) {
+                    FileEntity noFile = new FileEntity();
+                    noFile.setFileName("无");
+                    noFile.setFilePath("无");
+                    noFile.setCount(-1);
+                    noFile.setChangeTime("无");
+                    fileLists.add(noFile);
+                }
+                model.addAttribute("fileLists", fileLists);
+
+                return "index2";
+            } catch (IOException e) {
+                map.put("download_msg", "上传失败");
             }
-
-            List<FileEntity> fileLists = demoService.fileList();
-            if(fileLists==null){
-                FileEntity noFile = new FileEntity();
-                noFile.setFileName("无");
-                noFile.setFilePath("无");
-                noFile.setCount(-1);
-                noFile.setChangeTime("无");
-                fileLists.add(noFile);
-            }
-            model.addAttribute("fileLists", fileLists);
-
-            return "index2";
-        } catch (IOException e) {
-            map.put("download_msg","上传失败");
+        }else {
+            map.put("private_msg","权限错误");
         }
 
         return "index2";

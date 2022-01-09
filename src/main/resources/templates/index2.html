@@ -125,7 +125,7 @@
         <td th:text="${info.getFilePath()}"></td>
         <td th:text="${info.getCount()}"></td>
         <td th:text="${info.getChangeTime()}"></td>
-        <td><a th:href="@{/uploadsAndDownloads/download(source=${info.getFilePath()},fileName=${info.getFileName()})}">下载</a></td>
+        <td><a th:href="@{/uploadsAndDownloads/download(source=${info.getFilePath()},fileName=${info.getFileName()},privateKeyStr=${session.login.privateKey})}">下载</a></td>
     </tr>
 </table>
 
@@ -175,6 +175,10 @@
     var msg1 = [[${download_msg}]];
     if(msg1=='下载成功'||msg1=='下载失败') {
         alert(msg1);
+    }
+    var msg2 = [[${private_msg}]];
+    if(msg2=='权限错误') {
+        alert(msg2);
     }
 </script>
 
